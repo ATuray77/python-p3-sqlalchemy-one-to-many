@@ -9,6 +9,8 @@ metadata = MetaData(naming_convention=convention)
 
 Base = declarative_base(metadata=metadata)
 
+# Creates  models
+# Adds the Game model
 class Game(Base):
     __tablename__ = 'games'
 
@@ -17,3 +19,24 @@ class Game(Base):
     genre = Column(String())
     platform = Column(String())
     price = Column(Integer())
+    reviews = relationship('Review', backref=backref('game')) # Adds the relationship between tables on the one
+
+    # this function determines the structure of the display
+    def __repr__(self):
+        return f'Game(id={self.id}, ' + \
+            f'title={self.title}, ' + \
+            f'platform={self.platform})'
+
+# Adds the Review model
+class Review(Base):
+    __tablename__ = 'reviews'
+
+    id = Column(Integer(), primary_key=True)
+    score = Column(Integer())
+    comment = Column(String())
+    game_id = Column(Integer(), ForeignKey('games.id'))
+
+    def __repr__(self):
+        return f'Review(id={self.id}, ' + \
+            f'score={self.score}, ' + \
+            f'game_id={self.game_id})'
